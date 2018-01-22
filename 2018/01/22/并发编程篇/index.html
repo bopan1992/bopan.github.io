@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Panbo&#39;s Blog">
 <meta property="og:description" content="传统模式下的问题：1.同步通信：客户发出调用后，必须等待服务对象完成处理并返回结果后才能继续执行。2.客户和服务对象的生命周期紧密耦合：客户进程和服务对象进程都必须正常运行；如果由于服务对象崩溃或者网络故障导致客户的请求不可达，客户会接收到异常；3.点对点通信：客户的一次调用只发送给某个单独的目标对象。 面向消息的中间件(Message-Oriented Middleware, MOM)较好的解决">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-22T14:40:00.312Z">
+<meta property="og:updated_time" content="2018-01-22T14:53:43.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JMS">
 <meta name="twitter:description" content="传统模式下的问题：1.同步通信：客户发出调用后，必须等待服务对象完成处理并返回结果后才能继续执行。2.客户和服务对象的生命周期紧密耦合：客户进程和服务对象进程都必须正常运行；如果由于服务对象崩溃或者网络故障导致客户的请求不可达，客户会接收到异常；3.点对点通信：客户的一次调用只发送给某个单独的目标对象。 面向消息的中间件(Message-Oriented Middleware, MOM)较好的解决">
@@ -375,6 +375,7 @@
       
         <p>传统模式下的问题：<br>1.同步通信：客户发出调用后，必须等待服务对象完成处理并返回结果后才能继续执行。<br>2.客户和服务对象的生命周期紧密耦合：客户进程和服务对象进程都必须正常运行；如果由于服务对象崩溃或者网络故障导致客户的请求不可达，客户会接收到异常；<br>3.点对点通信：客户的一次调用只发送给某个单独的目标对象。</p>
 <p>面向消息的中间件(Message-Oriented Middleware, MOM)较好的解决了以上问题。发送者将消息发送给消息服务器，消息服务器将消息存放在若干队列中，在合适的时候再将消息转发给接收者。这种模式下：<br>1.发送和接收是异步的，发送者无需等待；<br>2.发送消息的时候接收者不一定运行，接收消息的时候发送者也不一定运行；<br>3.一对多通信，对于一个消息可以有多个接收者。</p>
+<p>JMS定义了Java中访问消息中间件的接口。JMS只是接口，并没有给予实现，实现JMS接口的消息中间件称为JMS Provider。MOM有很多种类，比如Apache的ActiveMQ、Alibaba的RocketMQ、IBM的MQSeries（听说很强）、BabbitMQ等等，他们都遵循JMS规范。另外还有大数据领域的Kafka并没有遵循JMS规范。</p>
 
       
     </div>
