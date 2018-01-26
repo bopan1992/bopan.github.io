@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Panbo&#39;s Blog">
 <meta property="og:description" content="阅读博客之前，我只知道RocketMQ与kafka是否遵循JMS规范的区别。 数据可靠性·RocketMQ支持异步实时刷盘，同步刷盘，同步复制，异步复制·Kafka使用异步刷盘方式，异步复制/同步复制 总结：RocketMQ的同步刷盘在单机可靠性上比Kafka更高，不会因为操作系统Crash，导致数据丢失。Kafka同步复制理论上性能低于RocketMQ的同步复制，原因是Kafka的数据以分区为单">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-25T16:12:16.631Z">
+<meta property="og:updated_time" content="2018-01-26T14:02:08.663Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ与Kafka对比（阅读博客阿里中间件）">
 <meta name="twitter:description" content="阅读博客之前，我只知道RocketMQ与kafka是否遵循JMS规范的区别。 数据可靠性·RocketMQ支持异步实时刷盘，同步刷盘，同步复制，异步复制·Kafka使用异步刷盘方式，异步复制/同步复制 总结：RocketMQ的同步刷盘在单机可靠性上比Kafka更高，不会因为操作系统Crash，导致数据丢失。Kafka同步复制理论上性能低于RocketMQ的同步复制，原因是Kafka的数据以分区为单">
@@ -375,7 +375,7 @@
       
         <p>阅读博客之前，我只知道RocketMQ与kafka是否遵循JMS规范的区别。</p>
 <p>数据可靠性<br>·RocketMQ支持异步实时刷盘，同步刷盘，同步复制，异步复制<br>·Kafka使用异步刷盘方式，异步复制/同步复制</p>
-<p>总结：RocketMQ的同步刷盘在单机可靠性上比Kafka更高，不会因为操作系统Crash，导致数据丢失。Kafka同步复制理论上性能低于RocketMQ的同步复制，原因是Kafka的数据以分区为单位组织，以为着一个Kafka实例上会有几百个数据分区，RocketMQ一个实例上只有一个数据分区，RocketMQ可以充分利用IO组Commit机制，批量传输数据，配置同步复制与异步复制相比，性能损耗约20%~30%。</p>
+<p>总结：RocketMQ的同步刷盘在单机可靠性上比Kafka更高，不会因为操作系统Crash，导致数据丢失。Kafka同步复制理论上性能低于RocketMQ的同步复制，原因是Kafka的数据以分区为单位组织，意味着一个Kafka实例上会有几百个数据分区，RocketMQ一个实例上只有一个数据分区，RocketMQ可以充分利用IO组Commit机制，批量传输数据，配置同步复制与异步复制相比，性能损耗约20%~30%。</p>
 <p>严格的消息顺序（可靠性）<br>·kafka支持消息顺序，但是一台代理宕机后，就会产生消息乱序<br>·RocketMQ支持严格的消息顺序，在顺序消息场景下，一台Broker宕机后，发送消息会失败，但是不会乱序</p>
 <p>（未完待续）</p>
 
@@ -522,7 +522,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/bopan1992.github.io/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
