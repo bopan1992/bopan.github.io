@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="ͬ��˵������server�������˵�ִ�з�ʽ��ͬ�����첽��ͬ�����첽һ�����������ϵͳ��Ӧ�ó����IO�����Ĳ�����������ġ�ͬ��ʱ��Ӧ�ó����ֱ�Ӳ���IO��д�������������ǵ�Ӧ�ó����ֱ��������ĳһ�������ϣ�ֱ������׼�����������߲�����ѯ�Ĳ���ʵʱ������ݵľ�">
+<meta name="description" content="同步说的是你server服务器端的执行方式。同步和异步：同步和异步一般是面向操作系统与应用程序对IO操作的层面上来区别的。同步时，应用程序会直接参与IO读写操作，并且我们的应用程序会直接阻塞到某一个方法上，直到数据准备就绪，或者采用轮询的策略实时检查数据的就绪状态，如果就绪则获取数据。异步时，则所有的IO读写操作交给操作系统处理，与我们的应用程序没有直接关系，我们的程序不关心IO读写，当操作系统完">
 <meta name="keywords" content="SocketIO,NIO">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SocketIO��NIO��">
+<meta property="og:title" content="SocketIO（NIO）">
 <meta property="og:url" content="https://bopan1992.github.io/2018/01/31/SocketIO20180131001/index.html">
 <meta property="og:site_name" content="Panbo&#39;s Blog">
-<meta property="og:description" content="ͬ��˵������server�������˵�ִ�з�ʽ��ͬ�����첽��ͬ�����첽һ�����������ϵͳ��Ӧ�ó����IO�����Ĳ�����������ġ�ͬ��ʱ��Ӧ�ó����ֱ�Ӳ���IO��д�������������ǵ�Ӧ�ó����ֱ��������ĳһ�������ϣ�ֱ������׼�����������߲�����ѯ�Ĳ���ʵʱ������ݵľ�">
+<meta property="og:description" content="同步说的是你server服务器端的执行方式。同步和异步：同步和异步一般是面向操作系统与应用程序对IO操作的层面上来区别的。同步时，应用程序会直接参与IO读写操作，并且我们的应用程序会直接阻塞到某一个方法上，直到数据准备就绪，或者采用轮询的策略实时检查数据的就绪状态，如果就绪则获取数据。异步时，则所有的IO读写操作交给操作系统处理，与我们的应用程序没有直接关系，我们的程序不关心IO读写，当操作系统完">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-31T14:16:52.740Z">
+<meta property="og:updated_time" content="2018-01-31T14:23:18.580Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SocketIO��NIO��">
-<meta name="twitter:description" content="ͬ��˵������server�������˵�ִ�з�ʽ��ͬ�����첽��ͬ�����첽һ�����������ϵͳ��Ӧ�ó����IO�����Ĳ�����������ġ�ͬ��ʱ��Ӧ�ó����ֱ�Ӳ���IO��д�������������ǵ�Ӧ�ó����ֱ��������ĳһ�������ϣ�ֱ������׼�����������߲�����ѯ�Ĳ���ʵʱ������ݵľ�">
+<meta name="twitter:title" content="SocketIO（NIO）">
+<meta name="twitter:description" content="同步说的是你server服务器端的执行方式。同步和异步：同步和异步一般是面向操作系统与应用程序对IO操作的层面上来区别的。同步时，应用程序会直接参与IO读写操作，并且我们的应用程序会直接阻塞到某一个方法上，直到数据准备就绪，或者采用轮询的策略实时检查数据的就绪状态，如果就绪则获取数据。异步时，则所有的IO读写操作交给操作系统处理，与我们的应用程序没有直接关系，我们的程序不关心IO读写，当操作系统完">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>SocketIO��NIO�� | Panbo's Blog</title>
+  <title>SocketIO（NIO） | Panbo's Blog</title>
   
 
 
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SocketIO��NIO��</h1>
+          <h1 class="post-title" itemprop="name headline">SocketIO（NIO）</h1>
         
 
         <div class="post-meta">
@@ -373,7 +373,7 @@
       
 
       
-        <p>ͬ��˵������server�������˵�ִ�з�ʽ��<br>ͬ�����첽��ͬ�����첽һ�����������ϵͳ��Ӧ�ó����IO�����Ĳ�����������ġ�<br>ͬ��ʱ��Ӧ�ó����ֱ�Ӳ���IO��д�������������ǵ�Ӧ�ó����ֱ��������ĳһ�������ϣ�ֱ������׼�����������߲�����ѯ�Ĳ���ʵʱ������ݵľ���״̬������������ȡ���ݡ�<br>�첽ʱ�������е�IO��д������������ϵͳ���������ǵ�Ӧ�ó���û��ֱ�ӹ�ϵ�����ǵĳ��򲻹���IO��д��������ϵͳ�����IO��д����ʱ���������Ӧ�ó�����֪ͨ�����ǵ�Ӧ�ó����ֱ���������ݼ��ɡ�<br>NIO��ʵ������ͬ��IO����ΪӦ�ó��������IO��д������bio�еĵ���inputstream��outputstream������˫���socketchannel��<br>����˵���Ǿ���ļ������������ݵķ�ʽ��״̬��io��nio����<br>nio֮���Խз�����IO������Ϊ��һ����·����ѡ����Selector����һ�����߳���ѯ��ǧ�����Ѿ�ע����Selector�ϵĿͻ���channel��ͬ��serverҲӦ��ע�ᵽSelector�ϣ���ֻ��NIO��һ�������֮����NIOʹ�õ��٣���NIO�е�buffer��̫���á��и�position�������Ҫflip���ܸ�λ��<br>���������netty����mina��NIOԭ��API���˷�װ�������������õ�API��mina2֧���첽ͨ��NIO2��AIO����<br>��δ�������</p>
+        <p>同步说的是你server服务器端的执行方式。<br>同步和异步：同步和异步一般是面向操作系统与应用程序对IO操作的层面上来区别的。<br>同步时，应用程序会直接参与IO读写操作，并且我们的应用程序会直接阻塞到某一个方法上，直到数据准备就绪，或者采用轮询的策略实时检查数据的就绪状态，如果就绪则获取数据。<br>异步时，则所有的IO读写操作交给操作系统处理，与我们的应用程序没有直接关系，我们的程序不关心IO读写，当操作系统完成了IO读写操作时，会给我们应用程序发送通知，我们的应用程序会直接拿走数据即可。<br>NIO的实质仍是同步IO，因为应用程序参与了IO读写，不是bio中的单向inputstream和outputstream，而是双向的socketchannel。<br>阻塞说的是具体的技术，接收数据的方式、状态（io，nio）。<br>nio之所以叫非阻塞IO，是因为有一个多路复用选择器Selector，是一个单线程轮询上千上万已经注册在Selector上的客户端channel（同理server也应该注册到Selector上）。只是NIO的一大进步，之所以NIO使用的少，是NIO中的buffer不太好用。有个position这个属性要flip才能复位。<br>后续会介绍netty或者mina对NIO原生API做了封装，可以理解更好用的API，mina2支持异步通信NIO2（AIO）。<br>（未完待续）</p>
 
       
     </div>
