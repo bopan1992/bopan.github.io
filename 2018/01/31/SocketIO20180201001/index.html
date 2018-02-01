@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/bopan1992.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/bopan1992.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/bopan1992.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/bopan1992.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/bopan1992.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/bopan1992.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/bopan1992.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SocketIO,NIO," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Client.java123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899">
+<meta name="keywords" content="SocketIO,NIO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SocketIO（NIO客户端与服务端通信双向实现）">
+<meta property="og:url" content="https://bopan1992.github.io/2018/01/31/SocketIO20180201001/index.html">
+<meta property="og:site_name" content="Panbo&#39;s Blog">
+<meta property="og:description" content="Client.java123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://bopan1992.github.io/bopan1992.github.io/images/20180201/001.png">
+<meta property="og:image" content="https://bopan1992.github.io/bopan1992.github.io/images/20180201/002.png">
+<meta property="og:updated_time" content="2018-02-01T12:05:35.702Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SocketIO（NIO客户端与服务端通信双向实现）">
+<meta name="twitter:description" content="Client.java123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899">
+<meta name="twitter:image" content="https://bopan1992.github.io/bopan1992.github.io/images/20180201/001.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/bopan1992.github.io/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bopan1992.github.io/2018/01/31/SocketIO20180201001/"/>
+
+
+
+
+
+  <title>SocketIO（NIO客户端与服务端通信双向实现） | Panbo's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/you"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6625ac1f3ee0a12250227cf83ce904423abf351/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/bopan1992.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Panbo's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">士不可以不弘毅，任重而道远。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/bopan1992.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/bopan1992.github.io/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/bopan1992.github.io/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/bopan1992.github.io/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/bopan1992.github.io/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-search">
+          <a href="/bopan1992.github.io/search" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-search"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bopan1992.github.io/bopan1992.github.io/2018/01/31/SocketIO20180201001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="panbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/bopan1992.github.io/images/blog-logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Panbo's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SocketIO（NIO客户端与服务端通信双向实现）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T00:00:00+08:00">
+                2018-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/bopan1992.github.io/categories/SocketIO/" itemprop="url" rel="index">
+                    <span itemprop="name">SocketIO</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/bopan1992.github.io/categories/SocketIO/NIO/" itemprop="url" rel="index">
+                    <span itemprop="name">NIO</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><figcaption><span>Client.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">package org.bopan.nio;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.net.InetSocketAddress;</span><br><span class="line">import java.nio.ByteBuffer;</span><br><span class="line">import java.nio.channels.SelectionKey;</span><br><span class="line">import java.nio.channels.Selector;</span><br><span class="line">import java.nio.channels.SocketChannel;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Design by bopan1992.github.io</span><br><span class="line"> * @author: p.b</span><br><span class="line"> * @date: 2018年2月1日 </span><br><span class="line"> * @Description: NIO编程实现客户端与服务端通信</span><br><span class="line"> */</span><br><span class="line">public class Client implements Runnable&#123;</span><br><span class="line">	private SocketChannel socketChannel;</span><br><span class="line">	private Selector selector;</span><br><span class="line">	private ByteBuffer readBuf = ByteBuffer.allocate(1024);</span><br><span class="line">	private ByteBuffer writeBuf = ByteBuffer.allocate(1024);</span><br><span class="line">	</span><br><span class="line">	public void init()&#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			//1.打开多路复用选择器</span><br><span class="line">			this.selector = Selector.open();</span><br><span class="line">			//2 打开服务器通道</span><br><span class="line">			socketChannel = SocketChannel.open();</span><br><span class="line">			//3 设置服务器通道为非阻塞模式</span><br><span class="line">			socketChannel.configureBlocking(false);</span><br><span class="line">			//创建连接的地址</span><br><span class="line">			InetSocketAddress address = new InetSocketAddress(&quot;127.0.0.1&quot;, 8765);</span><br><span class="line">			//4 绑定地址</span><br><span class="line">			if(socketChannel.connect(address))&#123;</span><br><span class="line">				socketChannel.register(this.selector, SelectionKey.OP_READ);</span><br><span class="line">				write(socketChannel);</span><br><span class="line">			&#125;else&#123;</span><br><span class="line">				socketChannel.register(this.selector, SelectionKey.OP_CONNECT);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(&quot;client start！&quot;);</span><br><span class="line">			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		while(true)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				//1 必须要让多路复用器开始监听</span><br><span class="line">				this.selector.select();</span><br><span class="line">				//2 返回多路复用器已经选择的结果集</span><br><span class="line">				Iterator&lt;SelectionKey&gt; keys = this.selector.selectedKeys().iterator();</span><br><span class="line">				//3 进行遍历</span><br><span class="line">				while(keys.hasNext())&#123;</span><br><span class="line">					//4 获取一个选择的元素</span><br><span class="line">					SelectionKey key = keys.next();</span><br><span class="line">					//5 直接从容器中移除就可以了</span><br><span class="line">					keys.remove();</span><br><span class="line">					//6 如果是有效的</span><br><span class="line">					if(key.isValid())&#123;</span><br><span class="line">						//7 如果为阻塞状态</span><br><span class="line">						if(key.isAcceptable())&#123;</span><br><span class="line">							System.out.println(&quot;isAcceptable::::&quot;);</span><br><span class="line">						&#125;</span><br><span class="line">						//8 如果为可读状态</span><br><span class="line">						if(key.isReadable())&#123;</span><br><span class="line">							read(socketChannel,key);</span><br><span class="line">						&#125;</span><br><span class="line">						//9 写数据</span><br><span class="line">						if(key.isWritable())&#123;</span><br><span class="line">							System.out.println(&quot;isWritable::::&quot;);</span><br><span class="line">						&#125;</span><br><span class="line">						//10连接</span><br><span class="line">						if(key.isConnectable())&#123;</span><br><span class="line">							socketChannel.register(this.selector, key.OP_READ);</span><br><span class="line">							if(socketChannel.finishConnect())&#123;</span><br><span class="line">								write(socketChannel);</span><br><span class="line">							&#125;else&#123;</span><br><span class="line">								System.exit(1);</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;catch(Exception e)&#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private void write(SocketChannel socketChannel)&#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			String comment = &quot;报告，服务端，我是客户端！&quot;;</span><br><span class="line">			this.writeBuf.put(comment.getBytes());</span><br><span class="line">			this.writeBuf.flip();</span><br><span class="line">			socketChannel.write(this.writeBuf);</span><br><span class="line">			if(!this.writeBuf.hasRemaining()) &#123;</span><br><span class="line">				System.out.println(&quot;client send success!&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;catch(IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;finally &#123;</span><br><span class="line">			this.writeBuf.clear();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private void read(SocketChannel socketChannel, SelectionKey key) &#123;</span><br><span class="line">		this.readBuf.clear();</span><br><span class="line">		try &#123;</span><br><span class="line">			int count = socketChannel.read(this.readBuf);</span><br><span class="line">			if(count == -1) &#123;</span><br><span class="line">				key.channel().close();</span><br><span class="line">				key.cancel();</span><br><span class="line">				return ;</span><br><span class="line">			&#125;</span><br><span class="line">			this.readBuf.flip();</span><br><span class="line">			byte[] bytes = new byte[this.readBuf.remaining()];</span><br><span class="line">			this.readBuf.get(bytes);</span><br><span class="line">			String comment = new String(bytes).trim();</span><br><span class="line">			System.out.println(&quot;Server: &quot;+comment);</span><br><span class="line">			key.interestOps(key.OP_READ);</span><br><span class="line">		&#125;catch(IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Client client = new Client();</span><br><span class="line">		client.init();</span><br><span class="line">		new Thread(client).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>Server.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line">package org.bopan.nio;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.net.InetSocketAddress;</span><br><span class="line">import java.nio.ByteBuffer;</span><br><span class="line">import java.nio.channels.SelectionKey;</span><br><span class="line">import java.nio.channels.Selector;</span><br><span class="line">import java.nio.channels.ServerSocketChannel;</span><br><span class="line">import java.nio.channels.SocketChannel;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Design by bopan1992.github.io</span><br><span class="line"> * @author: p.b</span><br><span class="line"> * @date: 2018年2月1日 </span><br><span class="line"> * @Description: NIO编程</span><br><span class="line"> */</span><br><span class="line">public class Server implements Runnable&#123;</span><br><span class="line"></span><br><span class="line">	// 声明多路复用选择器</span><br><span class="line">	private Selector selector;</span><br><span class="line">	// </span><br><span class="line">	private ByteBuffer readBuf = ByteBuffer.allocate(1024);</span><br><span class="line">	</span><br><span class="line">	private ByteBuffer writeBuf = ByteBuffer.allocate(1024);</span><br><span class="line">	</span><br><span class="line">	public void init() &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			//1.打开多路复用选择器</span><br><span class="line">			this.selector = Selector.open();</span><br><span class="line">			//2.打开服务器管道</span><br><span class="line">			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();</span><br><span class="line">			//3.非阻塞</span><br><span class="line">			serverSocketChannel.configureBlocking(false);</span><br><span class="line">			//4.绑定地址</span><br><span class="line">			serverSocketChannel.bind(new InetSocketAddress(8765));</span><br><span class="line">			//5.将服务器管道注册到多路复用选择器上，并且监听阻塞事件</span><br><span class="line">			serverSocketChannel.register(this.selector, SelectionKey.OP_ACCEPT);</span><br><span class="line">			</span><br><span class="line">			System.out.println(&quot;server start!&quot;);</span><br><span class="line">			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	// 单线程轮询多路复用选择器</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		while(true) &#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				//1.前面多路复用器已经打开，这里要让多路复用器开启监听</span><br><span class="line">				this.selector.select();</span><br><span class="line">				//2.返回多路复用选择器已经监听到的结果集</span><br><span class="line">				Iterator&lt;SelectionKey&gt; keys = this.selector.selectedKeys().iterator();</span><br><span class="line">				//3.遍历</span><br><span class="line">				while(keys.hasNext()) &#123;</span><br><span class="line">					//4.</span><br><span class="line">					SelectionKey key = keys.next();</span><br><span class="line">					//</span><br><span class="line">					keys.remove();</span><br><span class="line">					if(key.isValid()) &#123;</span><br><span class="line">						//4种状态</span><br><span class="line">						if(key.isAcceptable()) &#123;</span><br><span class="line">							accept(key);</span><br><span class="line">						&#125;</span><br><span class="line">						if(key.isReadable()) &#123;</span><br><span class="line">							read(key);</span><br><span class="line">						&#125;</span><br><span class="line">						if(key.isWritable()) &#123;</span><br><span class="line">							</span><br><span class="line">						&#125;</span><br><span class="line">						if(key.isConnectable()) &#123;</span><br><span class="line">							</span><br><span class="line">						&#125;					</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125; catch (IOException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			//</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private void accept(SelectionKey key) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			ServerSocketChannel serverSocketChannel = (ServerSocketChannel)key.channel();</span><br><span class="line">			SocketChannel socketChannel  = serverSocketChannel.accept();</span><br><span class="line">			socketChannel.configureBlocking(false);</span><br><span class="line">			socketChannel.register(this.selector, key.OP_READ);</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private void read(SelectionKey key) &#123;</span><br><span class="line">		SocketChannel socketChannel = (SocketChannel)key.channel();</span><br><span class="line">		try &#123;</span><br><span class="line">			int count = socketChannel.read(readBuf);</span><br><span class="line">			if(count == -1) &#123;</span><br><span class="line">				key.channel().close();</span><br><span class="line">				key.cancel();</span><br><span class="line">				return;</span><br><span class="line">			&#125;</span><br><span class="line">			this.readBuf.flip();</span><br><span class="line">			byte[] bytes = new byte[this.readBuf.remaining()];</span><br><span class="line">			this.readBuf.get(bytes);</span><br><span class="line">			</span><br><span class="line">			String comment = new String(bytes).trim();</span><br><span class="line">			System.out.println(&quot;Client:&quot;+comment);</span><br><span class="line">			write(socketChannel);</span><br><span class="line">			key.interestOps(key.OP_READ);</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private void write(SocketChannel socketChannel) &#123;</span><br><span class="line">		String comment = &quot;好的，服务器已收到！&quot;;</span><br><span class="line">		this.writeBuf.put(comment.getBytes());</span><br><span class="line">		this.writeBuf.flip();//这里记住flip复位</span><br><span class="line">		try &#123;</span><br><span class="line">			socketChannel.write(writeBuf);</span><br><span class="line">			if(!this.writeBuf.hasRemaining()) &#123;</span><br><span class="line">				System.out.println(&quot;server send success!&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;finally &#123;</span><br><span class="line">			this.writeBuf.clear();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Server server = new Server();</span><br><span class="line">		server.init();</span><br><span class="line">		new Thread(server).start();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="/bopan1992.github.io/images/20180201/001.png" title="server">
+<img src="/bopan1992.github.io/images/20180201/002.png" title="client">
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/bopan1992.github.io/tags/SocketIO/" rel="tag"># SocketIO</a>
+          
+            <a href="/bopan1992.github.io/tags/NIO/" rel="tag"># NIO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/bopan1992.github.io/2018/01/27/分布式20180127001/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/bopan1992.github.io/2018/01/31/SocketIO20180131001/" rel="prev" title="SocketIO（NIO）">
+                SocketIO（NIO） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/bopan1992.github.io/images/blog-logo.jpg"
+                alt="panbo" />
+            
+              <p class="site-author-name" itemprop="name">panbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/bopan1992.github.io/archives">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/bopan1992.github.io/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/bopan1992.github.io/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+ 
+  <i class="fa fa-user-md"></i><span id="busuanzi_value_site_uv"></span>
+  
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/bopan1992.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/bopan1992.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/bopan1992.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>
